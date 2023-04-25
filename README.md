@@ -24,15 +24,6 @@ byzantine-shield enhances the security of blockchain clients by:
 
 byzantine-shield can be easily integrated into your existing blockchain client application. Detailed instructions on setting up and configuring byzantine-shield will be provided in the documentation.
 
-## Roadmap
-
-- MVP
-- Utilize Goroutines for concurrent requests to nodes
-- Enable dynamic configuration for adding, removing, or updating nodes
-- Improve error handling with retries and timeouts
-- Integrate logging and monitoring for performance tracking and troubleshooting
-- Add authentication and encryption for secure communication
-
 ## Contributing
 
 We welcome contributions to byzantine-shield! If you would like to contribute, please follow our [contributing guidelines](CONTRIBUTING.md) to get started.
