@@ -1,0 +1,7 @@
+nodes:
+  - "https://eth-rpc.gateway.pokt.network"
+  - "https://rpc.builder0x69.io"
+  - "https://eth.llamarpc.com"
+  - "https://endpoints.omniatech.io/v1/eth/mainnet/public"
+  - "https://ethereum.publicnode.com"
+timeout: 10000
