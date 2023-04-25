@@ -1,6 +1,6 @@
-# byzantine-shield
+# Byzantine Shield
 
-byzantine-shield is a middleware proxy for blockchain clients designed to mitigate the risks associated with communicating with byzantine nodes. It forwards JSON RPC requests from clients, like Geth, to a pre-configured list of blockchain nodes, and aggregates their responses to detect inconsistencies and return a single, consistent answer.
+Byzantine Shield is a middleware proxy for blockchain clients designed to mitigate the risks associated with communicating with byzantine nodes. It forwards JSON RPC requests from clients, like Geth, to a pre-configured list of blockchain nodes, and aggregates their responses to detect inconsistencies and return a single, consistent answer.
 
 ## Features
 
@@ -12,22 +12,44 @@ byzantine-shield is a middleware proxy for blockchain clients designed to mitiga
 
 ## Security
 
-byzantine-shield enhances the security of blockchain clients by:
+Byzantine Shield enhances the security of blockchain clients by:
 
-1. **Mitigating byzantine node risks:** By aggregating responses from multiple nodes and detecting inconsistencies, byzantine-shield ensures that clients receive accurate and consistent data, even in the presence of malicious nodes.
+1. **Mitigating byzantine node risks:** By aggregating responses from multiple nodes and detecting inconsistencies, Byzantine Shield ensures that clients receive accurate and consistent data, even in the presence of malicious nodes.
 
-2. **Reducing single point of failure:** Clients are no longer dependent on a single blockchain node for their data. byzantine-shield contacts at least F+1 nodes (where F is the number of byzantine nodes the blockchain tolerates), increasing the chances of receiving correct data.
+2. **Reducing single point of failure:** Clients are no longer dependent on a single blockchain node for their data. Byzantine Shield contacts at least F+1 nodes (where F is the number of byzantine nodes the blockchain tolerates), increasing the chances of receiving correct data.
 
-3. **Enhancing trust:** By cross-verifying the responses from multiple nodes, byzantine-shield helps build trust in the data received by the client, ensuring its validity and accuracy.
+3. **Enhancing trust:** By cross-verifying the responses from multiple nodes, Byzantine Shield helps build trust in the data received by the client, ensuring its validity and accuracy.
 
 ## Usage
 
-byzantine-shield can be easily integrated into your existing blockchain client application. Detailed instructions on setting up and configuring byzantine-shield will be provided in the documentation.
+byzantine-shield can be easily integrated into your existing blockchain client application. Follow the steps below to set up and configure byzantine-shield:
+
+1. **Build the tool:** Build the byzantine-shield binary by running the following command:
+
+    ```bash
+    go build -o byzantine-shield cmd/main.go
+    ```
+
+    This will create an executable named `byzantine-shield` in folder `cmd/`.
+
+2. **Configuration:** Create a configuration file for byzantine-shield using the example provided in the `example/` folder. This file should include the list of blockchain nodes you want to use, as well as any other relevant settings.
+
+3. **Starting byzantine-shield:** Start the byzantine-shield proxy with the following command:
+
+    ```bash
+    ./byzantine-shield --config path/to/your/config.yml --addr 127.0.0.1 --port 8080
+    ```
+
+    Replace `path/to/your/config.yml` with the path to your configuration file, and adjust the `--addr` and `--port` options as needed.
+
+4. **Connecting your client application:** Now, your client application can connect to byzantine-shield by sending JSON RPC requests to the specified address and port (e.g., `http://127.0.0.1:8080`).
+
+By following these steps, you can easily integrate byzantine-shield into your existing blockchain client application and benefit from its security features.
 
 ## Contributing
 
-We welcome contributions to byzantine-shield! If you would like to contribute, please follow our [contributing guidelines](CONTRIBUTING.md) to get started.
+We welcome contributions to Byzantine Shield! If you would like to contribute, please follow our [contributing guidelines](CONTRIBUTING.md) to get started.
 
 ## License
 
-byzantine-shield is licensed under the [MIT License](LICENSE)
+Byzantine Shield is licensed under the [MIT License](LICENSE)
