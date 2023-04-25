@@ -1,4 +1,4 @@
-module byzantine-shield
+module github.com/BastienFaivre/byzantine-shield
 
 go 1.20
 

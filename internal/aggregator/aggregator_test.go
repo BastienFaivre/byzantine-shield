@@ -1,8 +1,9 @@
 package aggregator
 
 import (
-	"byzantine-shield/internal/types"
 	"testing"
+
+	"github.com/BastienFaivre/byzantine-shield/internal/types"
 )
 
 func TestAggregateResults(t *testing.T) {

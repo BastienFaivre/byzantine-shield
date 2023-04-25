@@ -2,15 +2,16 @@ package communication
 
 import (
 	"bytes"
-	"byzantine-shield/internal/aggregator"
-	"byzantine-shield/internal/config"
-	"byzantine-shield/internal/types"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"sync"
 	"time"
+
+	"github.com/BastienFaivre/byzantine-shield/internal/aggregator"
+	"github.com/BastienFaivre/byzantine-shield/internal/config"
+	"github.com/BastienFaivre/byzantine-shield/internal/types"
 )
 
 type Proxy struct {

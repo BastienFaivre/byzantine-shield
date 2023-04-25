@@ -1,8 +1,9 @@
 package aggregator
 
 import (
-	"byzantine-shield/internal/types"
 	"log"
+
+	"github.com/BastienFaivre/byzantine-shield/internal/types"
 )
 
 func AggregateResults(nbNodes int, results chan types.HttpResponse) (string, error) {

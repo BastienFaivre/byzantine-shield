@@ -2,10 +2,11 @@ package communication
 
 import (
 	"bytes"
-	"byzantine-shield/internal/config"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/BastienFaivre/byzantine-shield/internal/config"
 )
 
 func TestHandleRequest(t *testing.T) {

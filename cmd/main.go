@@ -1,13 +1,14 @@
 package main
 
 import (
-	"byzantine-shield/internal/communication"
-	"byzantine-shield/internal/config"
 	"flag"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
+
+	"github.com/BastienFaivre/byzantine-shield/internal/communication"
+	"github.com/BastienFaivre/byzantine-shield/internal/config"
 )
 
 var (
