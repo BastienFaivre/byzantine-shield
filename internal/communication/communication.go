@@ -2,7 +2,6 @@ package communication
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
@@ -90,6 +89,4 @@ func (p *Proxy) HandleRequest(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusOK)
 	// add response body
 	w.Write([]byte(res))
-
-	fmt.Println(res)
 }
