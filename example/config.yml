@@ -4,4 +4,4 @@ nodes:
   - "https://eth.llamarpc.com"
   - "https://endpoints.omniatech.io/v1/eth/mainnet/public"
   - "https://ethereum.publicnode.com"
-timeout: 10000
+timeout: 1000

@@ -26,18 +26,15 @@ func NewProxy(config config.Config) *Proxy {
 }
 
 func (p *Proxy) HandleRequest(w http.ResponseWriter, r *http.Request) {
-
-	log.Printf("Received request from %s", r.RemoteAddr)
-
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
 		log.Println(err)
 		return
 	}
 
-	log.Printf("Request %s", string(body))
+	log.Printf("Request from %s: %s", r.RemoteAddr, string(body))
 
-	results := make(chan types.HttpResponse, len(p.Nodes))
+	responses := make(chan types.HttpResponse, len(p.Nodes))
 	var wg sync.WaitGroup
 
 	for _, node := range p.Nodes {
@@ -69,17 +66,17 @@ func (p *Proxy) HandleRequest(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
-			results <- types.HttpResponse{
+			responses <- types.HttpResponse{
 				Node: node,
-				Body: string(body),
+				Body: body,
 			}
 		}(node)
 	}
 
 	wg.Wait()
-	close(results)
+	close(responses)
 
-	res, err := aggregator.AggregateResults(len(p.Nodes), results)
+	res, err := aggregator.AggregateResults(len(p.Nodes), responses)
 	if err != nil {
 		log.Println(err)
 		return

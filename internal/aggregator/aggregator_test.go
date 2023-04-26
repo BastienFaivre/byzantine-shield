@@ -8,9 +8,9 @@ import (
 
 func TestAggregateResults(t *testing.T) {
 	results := make(chan types.HttpResponse, 3)
-	results <- types.HttpResponse{Node: "node1", Body: `{"id":1,"jsonrpc":"2.0","result":42}`}
-	results <- types.HttpResponse{Node: "node2", Body: `{"id":1,"jsonrpc":"2.0","result":42}`}
-	results <- types.HttpResponse{Node: "node3", Body: `{"id":1,"jsonrpc":"2.0","result":24}`}
+	results <- types.HttpResponse{Node: "node1", Body: []byte(`{"id":1,"jsonrpc":"2.0","result":42}`)}
+	results <- types.HttpResponse{Node: "node2", Body: []byte(`{"id":1,"jsonrpc":"2.0","result":42}`)}
+	results <- types.HttpResponse{Node: "node3", Body: []byte(`{"id":1,"jsonrpc":"2.0","result":24}`)}
 	close(results)
 
 	aggregatedResponse, err := AggregateResults(3, results)

@@ -1,16 +1,47 @@
 package aggregator
 
 import (
+	"encoding/json"
 	"log"
+	"reflect"
 
 	"github.com/BastienFaivre/byzantine-shield/internal/types"
 )
 
-func AggregateResults(nbNodes int, results chan types.HttpResponse) (string, error) {
+func findKey(responseCount map[string]int, jsonObj map[string]interface{}) string {
+	for key := range responseCount {
+		var keyObj map[string]interface{}
+		err := json.Unmarshal([]byte(key), &keyObj)
+		if err == nil && reflect.DeepEqual(keyObj, jsonObj) {
+			return key
+		}
+	}
+	return ""
+}
+
+func AggregateResults(nbNodes int, responses chan types.HttpResponse) (string, error) {
 	responseCount := make(map[string]int)
 
-	for result := range results {
-		responseCount[result.Body]++
+	for response := range responses {
+		var jsonObj map[string]interface{}
+		err := json.Unmarshal(response.Body, &jsonObj)
+		if err != nil {
+			log.Println(err)
+		} else {
+			key := findKey(responseCount, jsonObj)
+			if key != "" {
+				responseCount[key]++
+			} else {
+				// Marshal to get a compact string representation
+				key_, err := json.Marshal(jsonObj)
+				if err != nil {
+					log.Println(err)
+				} else {
+					key = string(key_)
+					responseCount[key] = 1
+				}
+			}
+		}
 	}
 
 	maxCount := 0
@@ -23,8 +54,7 @@ func AggregateResults(nbNodes int, results chan types.HttpResponse) (string, err
 		}
 	}
 
-	log.Printf("Aggregated response: %s", aggregatedResponse)
-	log.Printf("Response count: %v/%v (%.2f%%)", maxCount, nbNodes, float64(maxCount)/float64(nbNodes)*100)
+	log.Printf("Aggregated response (mode ratio: %.2f%% (%v/%v)): %s", float64(maxCount)/float64(nbNodes)*100, maxCount, nbNodes, aggregatedResponse)
 
 	return aggregatedResponse, nil
 }
