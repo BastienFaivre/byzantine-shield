@@ -30,7 +30,7 @@ byzantine-shield can be easily integrated into your existing blockchain client a
     go build -o byzantine-shield cmd/main.go
     ```
 
-    This will create an executable named `byzantine-shield` in folder `cmd/`.
+    This will create an executable named `byzantine-shield`.
 
 2. **Configuration:** Create a configuration file for byzantine-shield using the example provided in the `example/` folder. This file should include the list of blockchain nodes you want to use, as well as any other relevant settings.
 
