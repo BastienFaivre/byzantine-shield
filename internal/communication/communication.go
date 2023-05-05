@@ -11,18 +11,18 @@ import (
 
 	"github.com/BastienFaivre/byzantine-shield/internal/aggregator"
 	"github.com/BastienFaivre/byzantine-shield/internal/config"
+	"github.com/BastienFaivre/byzantine-shield/internal/jsonrpc"
 	"github.com/BastienFaivre/byzantine-shield/internal/types"
+	"github.com/BastienFaivre/byzantine-shield/internal/utils"
 )
 
 type Proxy struct {
-	Nodes   []string
-	Timeout int
+	Config config.Config
 }
 
 func NewProxy(config config.Config) *Proxy {
 	return &Proxy{
-		Nodes:   config.Nodes,
-		Timeout: config.Timeout,
+		Config: config,
 	}
 }
 
@@ -35,10 +35,16 @@ func (p *Proxy) HandleRequest(w http.ResponseWriter, r *http.Request) {
 
 	log.Printf("Request from %s: %s", r.RemoteAddr, string(body))
 
-	responses := make(chan types.HttpResponse, len(p.Nodes))
+	rpcCall, err := jsonrpc.ParseCall(string(body))
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	responses := make(chan types.HttpResponse, len(p.Config.Nodes))
 	var wg sync.WaitGroup
 
-	for _, node := range p.Nodes {
+	for _, node := range p.Config.Nodes {
 		wg.Add(1)
 		go func(node string) {
 			defer wg.Done()
@@ -52,20 +58,20 @@ func (p *Proxy) HandleRequest(w http.ResponseWriter, r *http.Request) {
 			req.Header.Set("Content-Type", r.Header.Get("Content-Type"))
 
 			client := &http.Client{
-				Timeout: time.Duration(p.Timeout) * time.Millisecond,
+				Timeout: time.Duration(p.Config.Timeout) * time.Millisecond,
 			}
 			resp, err := client.Do(req)
 			if err != nil {
 				// timeout is considered as a valid response
 				if err, ok := err.(net.Error); ok && err.Timeout() {
-					id, err := getIdFromJSONRPC(string(body))
+					id, err := jsonrpc.GetIdFromCall(rpcCall)
 					if err != nil {
 						log.Println(err)
 						return
 					}
 					responses <- types.HttpResponse{
 						Node: node,
-						Body: []byte(buildTimeoutErrorJSONRPC(id)),
+						Body: []byte(jsonrpc.BuildTimeoutErrorResponse(id)),
 					}
 				}
 				log.Println(err)
@@ -89,10 +95,24 @@ func (p *Proxy) HandleRequest(w http.ResponseWriter, r *http.Request) {
 	wg.Wait()
 	close(responses)
 
-	res, err := aggregator.AggregateResults(len(p.Nodes), responses)
-	if err != nil {
-		log.Println(err)
-		return
+	var res string
+	if utils.Contains(p.Config.NonAggregateMethods, rpcCall.Method) {
+		id, err := jsonrpc.GetIdFromCall(rpcCall)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+		res, err = aggregator.JoinResults(len(p.Config.Nodes), responses, id)
+		if err != nil {
+			log.Println(err)
+			return
+		}
+	} else {
+		res, err = aggregator.AggregateResults(len(p.Config.Nodes), responses)
+		if err != nil {
+			log.Println(err)
+			return
+		}
 	}
 
 	w.Header().Set("Content-Type", "application/json")

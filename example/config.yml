@@ -5,3 +5,7 @@ nodes:
   - "https://endpoints.omniatech.io/v1/eth/mainnet/public"
   - "https://ethereum.publicnode.com"
 timeout: 1000
+nonAggregateMethods:
+  - "eth_sendTransaction"
+  - "eth_sendRawTransaction"
+  - "personal_sendTransaction"

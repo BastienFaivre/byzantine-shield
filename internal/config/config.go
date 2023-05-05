@@ -8,8 +8,9 @@ import (
 )
 
 type Config struct {
-	Nodes   []string `yaml:"nodes"`
-	Timeout int      `yaml:"timeout"`
+	Nodes               []string `yaml:"nodes"`
+	Timeout             int      `yaml:"timeout"`
+	NonAggregateMethods []string `yaml:"nonAggregateMethods"`
 }
 
 func LoadConfig(configPath string) (*Config, error) {
