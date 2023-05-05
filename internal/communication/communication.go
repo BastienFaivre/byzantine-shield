@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"io"
 	"log"
+	"net"
 	"net/http"
 	"sync"
 	"time"
@@ -55,6 +56,18 @@ func (p *Proxy) HandleRequest(w http.ResponseWriter, r *http.Request) {
 			}
 			resp, err := client.Do(req)
 			if err != nil {
+				// timeout is considered as a valid response
+				if err, ok := err.(net.Error); ok && err.Timeout() {
+					id, err := getIdFromJSONRPC(string(body))
+					if err != nil {
+						log.Println(err)
+						return
+					}
+					responses <- types.HttpResponse{
+						Node: node,
+						Body: []byte(buildTimeoutErrorJSONRPC(id)),
+					}
+				}
 				log.Println(err)
 				return
 			}
@@ -84,6 +97,5 @@ func (p *Proxy) HandleRequest(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	// add response body
 	w.Write([]byte(res))
 }
