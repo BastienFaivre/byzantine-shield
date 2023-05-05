@@ -7,7 +7,7 @@ Byzantine Shield is a middleware proxy for blockchain clients designed to mitiga
 - Aggregates responses from multiple blockchain nodes
 - Detects inconsistencies between node responses
 - Reduces the risks associated with byzantine nodes
-- Follows the JSON RPC API format
+- Compatible with blockchains following the JSON RPC API format
 - Written in Golang for performance and concurrency
 
 ## Security
