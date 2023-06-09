@@ -16,7 +16,7 @@ Byzantine Shield enhances the security of blockchain clients by:
 
 1. **Mitigating byzantine node risks:** By aggregating responses from multiple nodes and detecting inconsistencies, Byzantine Shield ensures that clients receive accurate and consistent data, even in the presence of malicious nodes.
 
-2. **Reducing single point of failure:** Clients are no longer dependent on a single blockchain node for their data. Byzantine Shield contacts at least F+1 nodes (where F is the number of byzantine nodes the blockchain tolerates), increasing the chances of receiving correct data.
+2. **Reducing single point of failure:** Clients are no longer dependent on a single blockchain node for their data. Byzantine Shield contacts multiple nodes, increasing the chances of receiving correct data.
 
 3. **Enhancing trust:** By cross-verifying the responses from multiple nodes, Byzantine Shield helps build trust in the data received by the client, ensuring its validity and accuracy.
 
